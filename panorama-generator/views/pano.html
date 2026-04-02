@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title><%= title %> | 360° Панорама</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .panorama-container {
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        #panorama {
+            width: 100%;
+            height: 100%;
+        }
+        .pano-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .pano-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+        .share-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .controls-info {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 1400px;">
+        <div class="pano-header">
+            <h1>🌐 <%= title %></h1>
+            <p>🎧 360° панорама | Управление: мышь/палец — вращение, колёсико — приближение</p>
+        </div>
+        
+        <div class="panorama-container">
+            <div id="panorama"></div>
+        </div>
+        
+        <div class="share-section">
+            <h3>🔗 Поделиться этой панорамой</h3>
+            <div class="share-link">
+                <input type="text" id="shareUrl" value="<%= shareUrl %>" readonly>
+                <button id="copyShareBtn">📋 Копировать ссылку</button>
+            </div>
+            <a href="/" class="back-link">← Создать новую панораму</a>
+        </div>
+        <div class="controls-info">
+            💡 Совет: изображение должно быть равнопрямоугольным (соотношение 2:1) для корректного отображения 360°
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <script>
+        // Initialize panorama viewer
+        const panoramaImage = "<%= imageProxyUrl %>";
+        
+        pannellum.viewer('panorama', {
+            "type": "equirectangular",
+            "panorama": panoramaImage,
+            "autoLoad": true,
+            "autoRotate": false,
+            "compass": true,
+            "showZoomCtrl": true,
+            "showFullscreenCtrl": true,
+            "hotSpotDebug": false,
+            "yaw": 0,
+            "pitch": 0,
+            "hfov": 100,
+            "minHfov": 50,
+            "maxHfov": 120
+        });
+        
+        // Copy share link functionality
+        const shareUrlInput = document.getElementById('shareUrl');
+        const copyShareBtn = document.getElementById('copyShareBtn');
+        
+        copyShareBtn.addEventListener('click', () => {
+            shareUrlInput.select();
+            document.execCommand('copy');
+            copyShareBtn.textContent = '✅ Скопировано!';
+            setTimeout(() => {
+                copyShareBtn.textContent = '📋 Копировать ссылку';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
